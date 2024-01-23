@@ -41,7 +41,6 @@ tools.forEach((tool) => {
 
   tool.addEventListener("dragend", (e) => {
     const inElement = getDragInElement(contentEl, e.clientX, e.clientY);
-    console.log(inElement);
     if (inElement != null) {
       const dupNode = document.createElement("p");
       dupNode.classList.add("panel");
@@ -61,16 +60,16 @@ function getDragInElement(contentEl, x, y) {
     contentEl,
     ...contentEl.querySelectorAll(".panel"),
   ];
-  return draggableElements.reduce(
+  const draggableEl = draggableElements.reduce(
     (closest, child) => {
       const box = child.getBoundingClientRect();
       const offsetX = x - box.left;
       const offsetY = y - box.top;
       if (
         offsetX > 0 &&
-        offsetX < box.right &&
+        x < box.right &&
         offsetY > 0 &&
-        offsetY < box.bottom
+        y < box.bottom
       ) {
         return { offsetX: offsetX, offsetY: offsetY, element: child };
       } else {
@@ -78,5 +77,6 @@ function getDragInElement(contentEl, x, y) {
       }
     },
     { offsetX: Number.NEGATIVE_INFINITY, offsetY: Number.NEGATIVE_INFINITY }
-  ).element;
+  )
+  return draggableEl.element;
 }
